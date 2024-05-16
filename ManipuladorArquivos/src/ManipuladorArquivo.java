@@ -24,22 +24,26 @@ public class ManipuladorArquivo {
         // Inicializando a menor posição com um valor alto
         int menorPosicao = Integer.MAX_VALUE;
 
-        // Verifica a posição do token de comentário '{' e atualiza menorPosicao se encontrado
+        // Verifica a posição do token de comentário '{' e atualiza menorPosicao se
+        // encontrado
         if (posChave != -1 && posChave < menorPosicao) {
             menorPosicao = posChave;
         }
 
-        // Verifica a posição do token de comentário '(*' e atualiza menorPosicao se encontrado
+        // Verifica a posição do token de comentário '(*' e atualiza menorPosicao se
+        // encontrado
         if (posParenteses != -1 && posParenteses < menorPosicao) {
             menorPosicao = posParenteses;
         }
 
-        // Verifica a posição do token de comentário '//' e atualiza menorPosicao se encontrado
+        // Verifica a posição do token de comentário '//' e atualiza menorPosicao se
+        // encontrado
         if (posComentario != -1 && posComentario < menorPosicao) {
             menorPosicao = posComentario;
         }
 
-        // Se nenhum token foi encontrado, retorna -1, caso contrário retorna a menor posição
+        // Se nenhum token foi encontrado, retorna -1, caso contrário retorna a menor
+        // posição
         return (menorPosicao == Integer.MAX_VALUE) ? -1 : menorPosicao;
     }
 
@@ -94,12 +98,14 @@ public class ManipuladorArquivo {
                 String tokenString = "";
                 contadorLinhas = contadorLinhas + 1;
 
-                // Se o comentário é do tipo '//' e a linha atual é maior que a primeira comentada
+                // Se o comentário é do tipo '//' e a linha atual é maior que a primeira
+                // comentada
                 if (tokenComentario == "//" && contadorLinhas > primeiraLinhaComentada) {
                     temInicioTokenComentario = false;
                 }
 
-                // Verifica se há um token de comentário na linha e se não está dentro de um comentário
+                // Verifica se há um token de comentário na linha e se não está dentro de um
+                // comentário
                 if (verificaQualTokenComentarioVemPrimeiro(codigodalinha) != null
                         && temInicioTokenComentario == false) {
                     tokenComentario = verificaQualTokenComentarioVemPrimeiro(codigodalinha);
@@ -109,19 +115,20 @@ public class ManipuladorArquivo {
                 }
 
                 // Verifica se há um token de final de comentário na linha
-            	if (codigodalinha.contains("}") && tokenComentario == "{"
-						|| codigodalinha.contains("*)") && tokenComentario == "(*") {
-					ultimalinhaComentada = contadorLinhas;
-					indiceTokenFinalComentario = tokenComentario == "{" ? codigodalinha.indexOf("}")
-							: codigodalinha.indexOf("*)");
-					temFinalTokenComentario = true;
+                if (codigodalinha.contains("}") && tokenComentario == "{"
+                        || codigodalinha.contains("*)") && tokenComentario == "(*") {
+                    ultimalinhaComentada = contadorLinhas;
+                    indiceTokenFinalComentario = tokenComentario == "{" ? codigodalinha.indexOf("}")
+                            : codigodalinha.indexOf("*)");
+                    temFinalTokenComentario = true;
 
-				}
+                }
 
                 // Verifica se a linha não contém tokens de início ou final de comentário
                 if (!codigodalinha.contains("{") && !codigodalinha.contains("}")
                         || !codigodalinha.contains("(*") && !codigodalinha.contains("*)")) {
-                    // Se o token de final de comentário foi encontrado e a linha atual é maior que a última comentada
+                    // Se o token de final de comentário foi encontrado e a linha atual é maior que
+                    // a última comentada
                     if (temFinalTokenComentario && contadorLinhas > ultimalinhaComentada) {
                         temInicioTokenComentario = false;
                         temFinalTokenComentario = false;
@@ -137,7 +144,8 @@ public class ManipuladorArquivo {
                             continue;
                         }
 
-                        // Se está dentro de um comentário, ignora os caracteres entre os delimitadores do comentário
+                        // Se está dentro de um comentário, ignora os caracteres entre os delimitadores
+                        // do comentário
                         if (temInicioTokenComentario) {
                             if (contadorLinhas == primeiraLinhaComentada && contadorLinhas == ultimalinhaComentada) {
                                 if (i > indiceTokenInicioComentario && i <= indiceTokenFinalComentario) {
@@ -189,12 +197,6 @@ public class ManipuladorArquivo {
                         var simboloAtual = simbolos.BuscarSimbolo(tokenString);
                         var simboloProximo = simbolos.BuscarSimbolo(tokenString + codigodalinha.charAt(i));
 
-                        // Se a linha é 37, imprime o token e o símbolo atual (para depuração)
-                        if (contadorLinhas == 37) {
-                            System.out.println(tokenString + " token");
-                            System.out.println(simboloAtual + " atual");
-                        }
-
                         // Se encontrou um símbolo, tenta encontrar o símbolo mais longo possível
                         if (simboloAtual != null) {
                             indiceStringSimbolo = i;
@@ -220,15 +222,19 @@ public class ManipuladorArquivo {
                                 AdicionarToken(codigodalinha.charAt(i) + "", RetornaTipo(codigodalinha.charAt(i) + ""));
                                 tokenString = "";
                             } else if (simboloProximo != null) {
-                                AdicionarToken(tokenString + codigodalinha.charAt(i), RetornaTipo(tokenString + codigodalinha.charAt(i)));
+                                AdicionarToken(tokenString + codigodalinha.charAt(i),
+                                        RetornaTipo(tokenString + codigodalinha.charAt(i)));
                                 tokenString = "";
                             } else {
-                                if (NaoTemCaracterEspecial(tokenString) && NaoTemCaracterEspecial(codigodalinha.charAt(i) + "")) {
-                                    AdicionarToken(tokenString + codigodalinha.charAt(i), RetornaTipo(tokenString + codigodalinha.charAt(i)));
+                                if (NaoTemCaracterEspecial(tokenString)
+                                        && NaoTemCaracterEspecial(codigodalinha.charAt(i) + "")) {
+                                    AdicionarToken(tokenString + codigodalinha.charAt(i),
+                                            RetornaTipo(tokenString + codigodalinha.charAt(i)));
                                     tokenString = "";
                                 } else {
                                     AdicionarToken(tokenString, RetornaTipo(tokenString));
-                                    AdicionarToken(codigodalinha.charAt(i) + "", RetornaTipo(codigodalinha.charAt(i) + ""));
+                                    AdicionarToken(codigodalinha.charAt(i) + "",
+                                            RetornaTipo(codigodalinha.charAt(i) + ""));
                                     tokenString = "";
                                 }
                             }
@@ -236,7 +242,8 @@ public class ManipuladorArquivo {
                             if (simboloAtual != null && simboloProximo == null && indiceStringSimbolo == i) {
                                 AdicionarToken(tokenString, RetornaTipo(tokenString));
                                 tokenString = "";
-                            } else if (NaoTemCaracterEspecial(tokenString) && !NaoTemCaracterEspecial(codigodalinha.charAt(i) + "")) {
+                            } else if (NaoTemCaracterEspecial(tokenString)
+                                    && !NaoTemCaracterEspecial(codigodalinha.charAt(i) + "")) {
                                 AdicionarToken(tokenString, RetornaTipo(tokenString));
                                 tokenString = "";
                             }
@@ -254,11 +261,6 @@ public class ManipuladorArquivo {
 
     // Método que verifica se o input não contém caracteres especiais
     public static boolean NaoTemCaracterEspecial(String input) {
-        if (input.trim().isEmpty()) {
-            String regex = "^[a-zA-Z0-9_ ]*$";
-            System.out.println(Pattern.matches(regex, input) + " patern");
-
-        }
         // Expressão regular para verificar se não há caracteres especiais
         String regex = "^[a-zA-Z0-9_]*$";
         return Pattern.matches(regex, input);
