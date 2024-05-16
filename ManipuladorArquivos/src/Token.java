@@ -1,0 +1,27 @@
+public class Token {
+	private String lexema;
+	private String tipo;
+
+	public Token() {
+
+	}
+
+	public Token(String lexema, String tipo) {
+		this.lexema = lexema;
+		this.tipo = tipo;
+
+	}
+
+	public String getLexema() {
+		return lexema;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+}
